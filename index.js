@@ -72,6 +72,7 @@ function displayResults(responseJson) {
         fetch(proxy + my_url, {
         }).then(data => {
           return data.text();
+          debugger;
         }).then(resp => {
           const parser = new DOMParser();
           const doc = parser.parseFromString(resp, 'text/html');
@@ -82,13 +83,21 @@ function displayResults(responseJson) {
           const ratingImage = allImages[1];
           const bias_rating = document.querySelectorAll('.bias_rating_placeholder')[holder];
           const factual_rating = document.querySelectorAll('.factual_rating_placeholder')[holder];
-          if (bias_rating && factual_rating) {
+          const source_not_found = `Unable to gather media bias info for ${source_name}`;
+          debugger;
+          if (doc.title == "Page not found - Media Bias/Fact Check") {
+            $("#bias_rating_placeholder").html(source_not_found);
+            $("#factual_rating_placeholder").html(source_not_found);
+          }
+          else if (bias_rating && factual_rating) {
             bias_rating.appendChild(biasImage);
             factual_rating.appendChild(ratingImage);
           }
+          debugger;
           holder += 1;
           console.log(doc);
         });
+      
 
         //replace the existing image with the new one
         api_data_holder += 
