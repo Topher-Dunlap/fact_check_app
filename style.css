@@ -3,7 +3,7 @@
   }
   
   body {
-    font-family: 'Roboto', sans-serif;
+    font-family: 'Oswald', sans-serif;
     text-align: center;
   }
 
@@ -15,7 +15,7 @@
   p:before, p:after{
     content: "";
     flex: 1 1;
-    border-bottom: 1px solid #000;
+    border-bottom: 1px solid #89c48a;
     margin: auto;
   }
   p:before {
@@ -41,4 +41,20 @@
   
   .hidden {
     display: none;
+  }
+
+  .results-img {
+    color: #1A73E8;
+  }
+
+  .fact_check_color_blue {
+    color: #1A73E8;
+  }
+
+  .fact_check_color_red {
+      color: #d7322d;
+  }
+
+  .fact_check_color_green {
+      color: #89c48a;
   }

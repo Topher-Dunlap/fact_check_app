@@ -106,10 +106,10 @@ function displayResults(responseJson) {
                     <h2 class="results-img">
                       Claim: <a href="${source_URL}" class="results-img left_align"> ${source_title}</a>
                     </h2>
-                    <h3>Claim Check: ${check_claim}</h3>
+                    <h3 class="fact_check_color_red">Claim Check: ${check_claim}</h3>
                     <br>
                     <br>
-                    <p>Fact Checking Source: ${source_name}</p>
+                    <p class="fact_check_color_green">Fact Checking Source: ${source_name}</p>
                     <h2>"${source_name}" Media Bias Rating: </h2>
                     <div class="bias_rating_placeholder"></div>
                     <h2>"${source_name}" Factual Reporting Record: </h2>
