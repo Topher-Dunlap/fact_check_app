@@ -1,40 +1,53 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Github repo search</title>
-    <link rel="shortcut icon" href="">
-    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@300;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/spin.js/4.1.0/spin.min.css">
-    <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Github repo search</title>
+  <link rel="shortcut icon" href="">
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Oswald:wght@300;700&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/spin.js/4.1.0/spin.min.css">
+  <!-- Latest compiled and minified CSS -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+  <!-- jQuery library -->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <!-- Latest compiled JavaScript -->
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+  <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
-    <div id="spinner">
+  <div id="spinner">
 
+  </div>
+  <div class="container">
+    <div class="results hidden">
+      <br>
     </div>
-    <div class="container">
-        <h1 class="left_align">Search for the latest fact checks for People & Topics</h1>
-        <form class="left_align">
-          <label for="state_id">Please enter a person or topic to fact check</label>
-          <input type="text" value="" id="state_id">
-         
-        <br>
-          <label> Number of returned results </label>
-          <input type="number" value="5" id="limit_num">
-        <br>
-          <input type="submit" value="Search">
-        </form>
-        <section class="results hidden">
-          <div id="show">
-
-          </div>
-          
-        </section>
-    </div>
-    <script src="https://code.jquery.com/jquery-3.3.1.js" integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60=" crossorigin="anonymous"></script>
-    <script src="spin.js"></script>
-    <script src="index.js"></script>
+    <h1 class="left_align" id="landing_header">Search for the latest fact checks <br> for People & Topics</h1>
+    <form class="left_align">
+      <fieldset>
+      <label for="state_id">Please enter a person or topic to fact check:</label>
+      <input type="text" placeholder="enter a topic or person" size="40" id="state_id">
+      <br>
+      <label> Number of returned results: </label>
+      <br>
+      <input type="number" placeholder="Enter a Value" size="10" id="limit_num">
+      <br>
+      <input type="submit" value="Search" class="button">
+      </fieldset>
+    </form>
+    <section class="results hidden">
+      <div id="show"></div>
+    </section>
+  </div>
+  <script src="https://code.jquery.com/jquery-3.3.1.js" integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60="
+    crossorigin="anonymous"></script>
+  <script src="spin.js"></script>
+  <script src="index.js"></script>
 </body>
+
 </html>

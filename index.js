@@ -12,6 +12,7 @@ let user_input = '';
 let limit_num = '';
 //Functions
 $("form").submit((event) => {
+  $("#show").html('');
   spinner = new Spin.Spinner().spin(document.querySelector('body'));
   event.preventDefault();
   user_input = $('input[type="text"]').val();
@@ -39,98 +40,118 @@ function add_user_input(u_input) {
   $("#show").prepend(user_input_string);
 }
 
-function displayResults(responseJson) {
+async function displayResults(responseJson) {
   console.log(responseJson);
   let obj = responseJson;
   let api_data_holder = "";
+  let claim_counter = 0;
   // determine length of results and user result input
   if (limit_num > obj.claims.length) {
     limit_num = obj.claims.length;
     console.log(limit_num);
   }
-  let holder = 0;
   for (let i = 0; i < limit_num; i++) {
-    let source_name = obj.claims[i].claimReview[0].publisher.name;
-    let check_claim = obj.claims[i].claimReview[0].textualRating;
-    let source_URL = obj.claims[i].claimReview[0].url;
-    let source_title = obj.claims[i].claimReview[0].title;
+      //Immediately invoked function executable
+      let source_name = obj.claims[i].claimReview[0].publisher.name;
+      let check_claim = obj.claims[i].claimReview[0].textualRating;
+      let source_URL = obj.claims[i].claimReview[0].url;
+      let source_title = obj.claims[i].claimReview[0].title;
+      //alter source name for url biased scraping
+      source_name = source_name.split(' ').join('-');
 
-    //alter source name for url biased scraping
-    source_name = source_name.split(' ').join('-');
-    //determine if there is a .com or.org at the end of name. If so remove it
-    if (source_name.includes(".")) {
-      source_name = source_name.substring(0, source_name.length - 4);
+      //determine if there is a .com or.org at the end of name. If so remove it
+      if (source_name.includes(".")) {
+        source_name = source_name.substring(0, source_name.length - 4);
+      }
+
+      //ajax variables
+      let my_url = `https://mediabiasfactcheck.com/${source_name.toLowerCase()}`;
       console.log(source_name);
-    }
-
-        //ajax variables
-        let my_url = `https://mediabiasfactcheck.com/${source_name.toLowerCase()}`;
-        console.log(source_name);
-        var proxy = 'https://arcane-reef-86631.herokuapp.com/';
-        // var proxy = 'https://cors-anywhere.herokuapp.com/';
-
-        fetch(proxy + my_url, {
-        }).then(data => {
-          return data.text();
-          debugger;
-        }).then(resp => {
-          const parser = new DOMParser();
-          const doc = parser.parseFromString(resp, 'text/html');
-          // const not_found = "<p> Bias Rating Not Found </p>"
-          // h2 with a class entry-title.  Find a descendent of the 2 called noscript.  Find a img underneath the noscript
-          const allImages = doc.querySelectorAll('h2.entry-title noscript img');
-          const biasImage = allImages[0];
-          const ratingImage = allImages[1];
-          const bias_rating = document.querySelectorAll('.bias_rating_placeholder')[holder];
-          const factual_rating = document.querySelectorAll('.factual_rating_placeholder')[holder];
-          const source_not_found = `Unable to gather media bias info for ${source_name}`;
-          debugger;
-          if (doc.title == "Page not found - Media Bias/Fact Check") {
-            $("#bias_rating_placeholder").html(source_not_found);
-            $("#factual_rating_placeholder").html(source_not_found);
-          }
-          else if (bias_rating && factual_rating) {
-            bias_rating.appendChild(biasImage);
-            factual_rating.appendChild(ratingImage);
-          }
-          debugger;
-          holder += 1;
-          console.log(doc);
-        });
+      var proxy = 'https://arcane-reef-86631.herokuapp.com/';
       
-
+      // This is async, so don't move on until this is done.
+      await fetch(proxy + my_url, {}).then(data => {
+        if (!data.ok) {
+          // Could put a placeholder here for "no information"
+          throw new Error("invalid fetch request");
+        }
+        return data.text();
+      }).then(resp => {
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(resp, 'text/html');
+        const allImages = doc.querySelectorAll('h2.entry-title noscript img');
+        // Handle the 'no image' problem here.  
+        let biasImage = '';
+        let ratingImage = '';
+        if (allImages.length) {
+          biasImage = allImages[0];
+          ratingImage = allImages[1];
+  
+        }
+       
         //replace the existing image with the new one
-        api_data_holder += 
+        claim_counter += 1;
+        api_data_holder +=
                     `<br>
-                    <hr>
-                    <h2 class="results-img">
-                      Claim: <a href="${source_URL}" class="results-img left_align"> ${source_title}</a>
-                    </h2>
-                    <h3 class="fact_check_color_red">Claim Check: ${check_claim}</h3>
-                    <br>
-                    <br>
-                    <p class="fact_check_color_green">Fact Checking Source: ${source_name}</p>
-                    <h2>"${source_name}" Media Bias Rating: </h2>
-                    <div class="bias_rating_placeholder"></div>
-                    <h2>"${source_name}" Factual Reporting Record: </h2>
-                    <div class="factual_rating_placeholder"></div>
-                    <br>
-                    <div>
-                      Bias and factual ratings taken from <a href="${my_url}" class="results-img left_align">Media Bias/Fact Check</a>
+                  <div class="media">
+                    <!-- <img src="..." class="mr-3" alt="..."> -->
+                    <div id="claim_container">
+                      <h2 class="results-img">
+                        Claim #${claim_counter}: <a href="${source_URL}" class="results-img left_align"> ${source_title}</a>
+                      </h2>
+                      <h2 class="fact_check_color_red">
+                      ${source_name} states this claim is: ${check_claim}
+                      </h2>
                     </div>
                     <br>
+                    <div class="media_bias_container_style">
+                      <p class="fact_check_color_green">Source Claim Check is: ${source_name}</p>
+                      <h2>"${source_name}" Media Bias Rating: </h2>
+                      <div class="media_bias_container_style"></div>
+                        <br>
+                        <div class="bias_rating_placeholder"></div>
+                      <h2>"${source_name}" Factual Reporting Record: </h2>
+                        <div class="factual_rating_placeholder"></div>
+                          <br>
+                        <div>
+                          <h4>Bias and factual ratings taken from <a href="${my_url}" class="results-img left_align">Media Bias/Fact Check</a></h4>
+                        </div>
+                    </div>
+                  </div>
+                    <br>
+                    <hr>
                     <br>
                     `;
-    }
-    //display the results section
-    $("#show").html(api_data_holder);
-    $(".results").removeClass("hidden");
-    console.log(user_input);
-    add_user_input(user_input);
-    spinner.stop();
-  }
+  
+        //display the results section
+        debugger;
+        $("#show").html(api_data_holder);
 
-  $(function () {
-    console.log("App loaded! Waiting for submit!");
-    // watchForm();
-  });
+        const bias_rating = document.querySelectorAll('.bias_rating_placeholder')[i];
+        const factual_rating = document.querySelectorAll('.factual_rating_placeholder')[i];
+        const source_not_found = `Unable to gather media bias info for ${source_name}`;
+        if (doc.title == "<p>Page not found - Media Bias/Fact Check</p>") {
+          // append means add to it.
+          $("#bias_rating_placeholder").appendChild(source_not_found);
+          debugger;
+          // erase everything in it.
+          $("#factual_rating_placeholder").appendChild(source_not_found);
+        } 
+        else if (bias_rating && factual_rating) {
+          bias_rating.appendChild(biasImage);
+          factual_rating.appendChild(ratingImage);
+        }
+      }).catch(_ => {
+        console.log('we hit the bottom catch block')
+      });
+  }
+  $("#landing_header").hide();
+  $(".results").removeClass("hidden");
+  add_user_input(user_input);
+  spinner.stop();
+  
+}
+$(function () {
+  console.log("App loaded! Waiting for submit!");
+  // watchForm();
+});
