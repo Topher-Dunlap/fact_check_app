@@ -29,6 +29,7 @@ function fetch_api_data(user_input, limit_num = 5) {
     .then((response) => response.json())
     .then((responseJson) => displayResults(responseJson))
     .catch(error =>  {
+      debugger;
       spinner.stop();
       alert('Something went wrong. Try again later.')
     });
@@ -40,17 +41,33 @@ function add_user_input(u_input) {
   user_input_string += `<br> <h3 class="results-img left_align"> ${limit_num} results for: '${new_user_input}'</h3>`;
   $("#show").prepend(user_input_string);
 }
+// pass by reference
+function displayNoResult(api_data_holder) {
+  const $html = $("<div>Nothing was found.  Abandon all hope.</div>");
+  api_data_holder.push($html); 
+  return api_data_holder;
+}
 
 async function displayResults(responseJson) {
   console.log(responseJson);
   let obj = responseJson;
-  let api_data_holder = "";
+  let api_data_holder = [];
   let claim_counter = 0;
-
+  if (!obj || !obj.claims) {
+    api_data_holder = displayNoResult(api_data_holder);
+    $("#show").html(api_data_holder);
+    $("#landing_header").hide();
+    $("#sticky_header").show();
+    $(".results").removeClass("hidden");
+    add_user_input(user_input);
+    spinner.stop();
+    return;
+  } 
   // determine length of results and user result input
   if (limit_num > obj.claims.length) {
     limit_num = obj.claims.length;
   }
+  let imageLocation = 0;
   for (let i = 0; i < limit_num; i++) {
     //Immediately invoked function executable
     let source_name = obj.claims[i].claimReview[0].publisher.name;
@@ -82,71 +99,79 @@ async function displayResults(responseJson) {
 
       //replace the existing image with the new one
       claim_counter += 1;
-      api_data_holder +=
-        `<br>
-                <div class="card media round_box_corners_top">
-                  <div class="card-body" id="claim_container">
-                    <h4 class="badge badge-warning">Claim #${claim_counter}:</h4>
-                    <h2 class="card-title">"${source_title}" ${claimant}</h2>
-                    <h3 class="fact_check_color_red"> ${source_name} states this claim is: ${check_claim}</h3>
-                    <a href="${source_URL}" class="btn btn-primary button_bottom_margin mx-auto button_margin_left">${source_name} Assessment</a>
-                  </div>
-                </div>
-                    <br>
-                  <div class="card media_bias_container_style text-center">
-                    <div class="card-body">
-                      <p class="card-text fact_check_color_red"> Claim Check by: ${source_name}</p>
-                      <h2 class="card-title">"${source_name}" Media Bias Rating: </h2>
-                        <div class="media_bias_container_style"></div>
-                      <br>
-                        <div class="bias_rating_placeholder"></div>
-                      <h2>"${source_name}" Factual Reporting Record: </h2>
-                        <div class="factual_rating_placeholder"></div>
-                      <br>
-                      <div>
-                        <h4>Bias and factual ratings taken from  <a href="${my_url}" class="btn btn-primary results-img">Media Bias/Fact Check</a></h4>
-                      </div>
-                    </div>
-                  </div>
-                    `;
+      
 
       //display the results section
-      $("#show").html(api_data_holder);
-
+      let doc;
+      let biasImage = '';
+      let ratingImage = '';
+      const source_not_found = `Unable to gather media bias info for ${source_name}`;
+    try {
        // This is async, so don't move on until this is done.
     await fetch(proxy + my_url, {}).then(data => {
       debugger;
-      if (!data.ok) {
+      if (!data.ok || data.status === 404) {
         // Could put a placeholder here for "no information"
-        console.log("404 error")
+        console.log("404 error");
+        // Do stuff here.
+        // add html, cry.  
         throw new Error("invalid fetch request");
-        const source_not_found = `Unable to gather media bias info for ${source_name}`;
+        
       }
       return data.text();
     }).then(resp => {
       const parser = new DOMParser();
-      const doc = parser.parseFromString(resp, 'text/html');
+      doc = parser.parseFromString(resp, 'text/html');
       const allImages = doc.querySelectorAll('h2.entry-title noscript img');
       // Handle the 'no image' problem here.  
-      let biasImage = '';
-      let ratingImage = '';
+      
       if (allImages.length) {
-        biasImage = allImages[0];
-        ratingImage = allImages[1];
+        biasImage = $(allImages[0]);
+        ratingImage = $(allImages[1]);
+      } else {
+        biasImage = source_not_found;
+        ratingImage = source_not_found;
       }
+      console.log({i, imageLocation});
+      const $htmlHolder = $(`<br>
+      <div class="card media round_box_corners_top">
+        <div class="card-body" id="claim_container">
+          <h4 class="badge badge-warning">Claim #${claim_counter}:</h4>
+          <h2 class="card-title">"${source_title}" ${claimant}</h2>
+          <h3 class="fact_check_color_red"> ${source_name} states this claim is: ${check_claim}</h3>
+          <a href="${source_URL}" class="btn btn-primary button_bottom_margin mx-auto button_margin_left">${source_name} Assessment</a>
+        </div>
+      </div>
+          <br>
+        <div class="card media_bias_container_style text-center">
+          <div class="card-body">
+            <p class="card-text fact_check_color_red"> Claim Check by: ${source_name}</p>
+            <h2 class="card-title">"${source_name}" Media Bias Rating: </h2>
+              <div class="media_bias_container_style"></div>
+            <br>
+              <div class="bias_rating_placeholder">${biasImage}</div>
+            <h2>"${source_name}" Factual Reporting Record: </h2>
+              <div class="factual_rating_placeholder"></div>
+            <br>
+            <div>
+              <h4>Bias and factual ratings taken from  <a href="${my_url}" class="btn btn-primary results-img">Media Bias/Fact Check</a></h4>
+            </div>
+          </div>
+        </div>
+          `);
+         $htmlHolder.find('.bias_rating_placeholder').html(biasImage);
+         $htmlHolder.find('.factual_rating_placeholder').html(ratingImage);
+      api_data_holder.push($htmlHolder);
+      
+      imageLocation += 1;
+     
     }).catch(_ => {
+      // Do thing s here.
       console.log('we hit the bottom catch block')
     });
-    const bias_rating = document.querySelectorAll('.bias_rating_placeholder')[i];
-    const factual_rating = document.querySelectorAll('.factual_rating_placeholder')[i];
-    if (doc.title == "<p>Page not found - Media Bias/Fact Check</p>") {
-      // append means add to it.
-      $("#bias_rating_placeholder").appendChild(source_not_found);
-      // erase everything in it.
-      $("#factual_rating_placeholder").appendChild(source_not_found);
-    } else if (bias_rating && factual_rating) {
-      bias_rating.appendChild(biasImage);
-      factual_rating.appendChild(ratingImage);
+    $("#show").html(api_data_holder);
+  } catch (err) {
+    debugger;
     }
   }
   $("#landing_header").hide();
