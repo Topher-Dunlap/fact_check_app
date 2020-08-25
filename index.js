@@ -119,7 +119,7 @@ async function displayResults(responseJson) {
       <div class="card media round_box_corners_top">
         <div class="card-body" id="claim_container">
           <h4 class="badge badge-warning">Claim #${claim_counter}:</h4>
-          <h2 class="card-title">"${source_title}" ${claimant}</h2>
+          <h2 class="card-title">${source_title} ${claimant}</h2>
           <h3 class="fact_check_color_red"> ${source_name} states this claim is: ${check_claim}</h3>
           <a href="${source_URL}" class="btn btn-primary button_bottom_margin mx-auto button_margin_left">${source_name} Assessment</a>
         </div>
@@ -127,7 +127,7 @@ async function displayResults(responseJson) {
           <br>
         <div class="card media_bias_container_style text-center">
           <div class="card-body">
-            <p class="card-text fact_check_color_red"> This Claim was checked by: ${source_name}</p>
+            <p class="card-text fact_check_color_red">${source_name}</p>
             <h2 class="card-title">"${source_name}" Media Bias Rating: </h2>
               <div class="media_bias_container_style"></div>
             <br>
@@ -144,9 +144,10 @@ async function displayResults(responseJson) {
          $htmlHolder.find('.bias_rating_placeholder').html(biasImage);
          $htmlHolder.find('.factual_rating_placeholder').html(ratingImage);
          if (doc.title === "Page not found - Media Bias/Fact Check") {
-          $htmlHolder.find('.bias_rating_placeholder').css("width", "/* */");
+          ($htmlHolder.find(`.bias_rating_placeholder`)).removeClass(`bias_rating_placeholder`);
         }
         //  remove_bias_class($htmlHolder);
+        console.log($htmlHolder);
       api_data_holder.push($htmlHolder);
     
     }).catch(_ => {
@@ -175,8 +176,8 @@ function number_needed(num) {
   }
 }
 
-// function remove_bias_class(html_input) {
-//   if (!data.ok || data.status === 404) {
-//     $htmlHolder.find('.bias_rating_placeholder').css( "width", "0" );
-//   }
-// }
+function remove_bias_class(html_input) {
+  if (!data.ok || data.status === 404) {
+    $htmlHolder.find('.bias_rating_placeholder').css( "width", "0" );
+  }
+}
