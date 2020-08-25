@@ -165,6 +165,10 @@
     border-top-right-radius: 20px;
   }
 
+  .red_text {
+      color: red;
+  }
+
   .sticky {
     text-align: center;
     background-color: #F7A305;

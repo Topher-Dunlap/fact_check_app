@@ -107,6 +107,7 @@ async function displayResults(responseJson) {
       const allImages = doc.querySelectorAll('h2.entry-title noscript img');
 
       // Handle the 'no image' problem here.  
+      console.log(allImages);
       if (allImages.length) {
         biasImage = $(allImages[0]);
         ratingImage = $(allImages[1]);
@@ -131,9 +132,9 @@ async function displayResults(responseJson) {
             <h2 class="card-title">"${source_name}" Media Bias Rating: </h2>
               <div class="media_bias_container_style"></div>
             <br>
-              <div class="bias_rating_placeholder">${biasImage}</div>
+              <div class="bias_rating_placeholder red_text">${biasImage}</div>
             <h2>"${source_name}" Factual Reporting Record: </h2>
-              <div class="factual_rating_placeholder"></div>
+              <div class="factual_rating_placeholder red_text"></div>
             <br>
             <div>
               <h4>Bias and factual ratings taken from  <a href="${my_url}" class="btn btn-primary results-img">Media Bias/Fact Check</a></h4>
@@ -143,16 +144,13 @@ async function displayResults(responseJson) {
           `);
          $htmlHolder.find('.bias_rating_placeholder').html(biasImage);
          $htmlHolder.find('.factual_rating_placeholder').html(ratingImage);
+          //  remove_bias_class($htmlHolder);
          if (doc.title === "Page not found - Media Bias/Fact Check") {
           ($htmlHolder.find(`.bias_rating_placeholder`)).removeClass(`bias_rating_placeholder`);
         }
-        //  remove_bias_class($htmlHolder);
-        console.log($htmlHolder);
       api_data_holder.push($htmlHolder);
     
     }).catch(_ => {
-      // Do thing s here.
-      console.log('we hit the bottom catch block')
     });
     $("#show").html(api_data_holder);
   } catch (err) {
@@ -176,8 +174,3 @@ function number_needed(num) {
   }
 }
 
-function remove_bias_class(html_input) {
-  if (!data.ok || data.status === 404) {
-    $htmlHolder.find('.bias_rating_placeholder').css( "width", "0" );
-  }
-}
