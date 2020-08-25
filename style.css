@@ -3,24 +3,30 @@
   }
 
   a:link {
-    color: white;
+    color: #ffffff
     }
     a:visited {
-    color: white;
+    color: #ffffff;
     }
-    /* a:hover {
+    a:hover {
     color: #ff3300;
     }
-   */
+  
   body {
     margin: auto;
     /* font-family: 'Oswald', sans-serif; */
     color: #022859;
-    background-color: #3CAEA3;
+    /* background-color: #3CAEA3; */
   }
 
   hr {
       height: 2px;
+  }
+
+  img {
+      /* height: auto; */
+      /* width: 30rem;
+      vertical-align: middle; */
   }
 
   fieldset {
@@ -38,7 +44,7 @@
   p:before, p:after{
     content: "";
     flex: 1 1;
-    border-bottom: 1px solid white;
+    border-bottom: 1px solid red;
     margin: auto;
   }
   p:before {
@@ -49,9 +55,16 @@
   }
 
   /* classes */
-  .media_bias_container_style {
-    text-align: center;
-    font-family: 'Bebas Neue', cursive;
+
+  .card-body {
+    -webkit-box-flex: 1;
+    -ms-flex: 1 1 auto;
+    flex: 1 1 auto;
+    padding: 1.25rem;
+}
+
+  .badge {
+      background-color: #31B0D5
   }
 
   .bias_rating_placeholder {
@@ -59,11 +72,33 @@
   }
 
   .button {
+    color: white;
     margin-top: 1rem;
+    /* background-color: #056EF7;
+    border: #056EF7; */
 }
 
-  .left_align {
-    text-align: left;
+  .button_bottom_margin {
+    margin-bottom: 1.5rem;
+  }
+
+  .btn {
+      color: #ffffff;
+      background-color: #F7A305;
+      border: #F7A305;
+  }
+
+  .bottom_margin {
+      margin-bottom: 30px;
+  }
+
+  .card{
+    /* box-shadow: 0 0 0 2px black; */
+    background-color: #f5f5f5;
+  }
+
+  .center_text {
+      text-align: center;
   }
   
   .container {
@@ -94,8 +129,60 @@
       color: white;
   }
 
+  .copywrite {
+    margin-top: 5rem;
+    font-size: 1rem;
+    text-align: center;
+    font-family: 'Abel', sans-serif;
+}
+
+  .left_align {
+    text-align: left;
+  }
+
+  .logo_img {
+    /* height: auto; */
+    width: 4rem;
+    vertical-align: middle;
+}
+
+  .media_bias_container_style {
+    border-bottom-left-radius: 20px;
+    border-bottom-right-radius: 20px;
+    height:auto;
+    overflow:auto;
+    text-align: center;
+    /* clear: right; */
+    font-family: 'Bebas Neue', cursive;
+  }
+
+  .navbar-brand img {
+    display: inline;
+}
+
+  .round_box_corners_top {
+    border-top-left-radius: 20px;
+    border-top-right-radius: 20px;
+  }
+
+  .sticky {
+    text-align: center;
+    background-color: #F7A305;
+    color: #ffffff;
+    position: sticky;
+    margin-top: 0;
+    top: 0;
+    height: 3rem;
+    width: 100%;
+  }
+
+  .title_page_alignment {
+      /* display: inline; */
+      /* line-height: 4; */
+  }
+
 /* ID's */
 
-/* #claim_container {
-    background-color: beige;
-} */
+.bias_rating_placeholder img {
+    width: 2000%;
+}

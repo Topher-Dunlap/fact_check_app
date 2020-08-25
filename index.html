@@ -2,50 +2,72 @@
 <html lang="en">
 
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>Github repo search</title>
   <link rel="shortcut icon" href="">
-  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Oswald:wght@300;700&display=swap"
-    rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/spin.js/4.1.0/spin.min.css">
   <!-- Latest compiled and minified CSS -->
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
-  <!-- jQuery library -->
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
   <!-- Latest compiled JavaScript -->
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/spin.js/4.1.0/spin.min.css">
+  <!--Google Fonts-->
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Oswald:wght@300;700&display=swap"
+    rel="stylesheet">
   <link rel="stylesheet" href="style.css">
 </head>
 
-<body>
-  <div id="spinner">
+<header>
+  <!-- Image and text -->
+  <nav class="navbar navbar-brand navbar-light bg-light sticky">
+    <img src="images/check_logo.png" width="10" height="30" class="logo_img d-inline-block align-top" alt="check-logo">
+    The Simple Fact
+  </nav>
+</header>
 
-  </div>
+<body>
+  <div id="spinner"></div>
   <div class="container">
     <div class="results hidden">
       <br>
     </div>
-    <h1 class="left_align" id="landing_header">Search for the latest fact checks <br> for People & Topics</h1>
+    <div>
+      <h1 class="bottom_margin title_page_alignment">Search for the latest fact checks on People &
+        Topics</h1>
+    </div>
     <form class="left_align">
       <fieldset>
-      <label for="state_id">Please enter a person or topic to fact check:</label>
-      <input type="text" placeholder="enter a topic or person" size="40" id="state_id">
-      <br>
-      <label> Number of returned results: </label>
-      <br>
-      <input type="number" placeholder="Enter a Value" size="10" id="limit_num">
-      <br>
-      <input type="submit" value="Search" class="button">
+        <label for="state_id">Please enter a person or topic to fact check:</label>
+        <input type="text" placeholder="Enter a Topic or Person" size="40" id="state_id">
+        <br>
+        <label> Number of returned results: </label>
+        <br>
+        <input type="number" placeholder="Enter a Value" size="10" id="limit_num">
+        <br>
+        <input type="submit" value="Search" class="button btn btn-info">
       </fieldset>
     </form>
     <section class="results hidden">
       <div id="show"></div>
     </section>
+    <footer>
+      <h4 class="copywrite">© Topher Dunlap</h4>
+    </footer>
   </div>
-  <script src="https://code.jquery.com/jquery-3.3.1.js" integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60="
-    crossorigin="anonymous"></script>
+  <!-- jQuery library -->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+  <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+    integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous">
+  </script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+    integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous">
+  </script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+    integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous">
+  </script>
+  <!-- <script src="https://code.jquery.com/jquery-3.3.1.js" integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60="
+    crossorigin="anonymous"></script> -->
   <script src="spin.js"></script>
   <script src="index.js"></script>
 </body>
