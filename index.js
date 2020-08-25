@@ -100,38 +100,6 @@ async function displayResults(responseJson) {
     try {
        // This is async, so don't move on until this is done.
     await fetch(proxy + my_url, {}).then(data => {
-      // if (!data.ok || data.status === 404) {
-      //   const $404Holder = $(`<br>
-      //   <div class="card media round_box_corners_top">
-      //     <div class="card-body" id="claim_container">
-      //       <h4 class="badge badge-warning">Claim #${claim_counter}:</h4>
-      //       <h2 class="card-title">"${source_title}" ${claimant}</h2>
-      //       <h3 class="fact_check_color_red"> ${source_name} states this claim is: ${check_claim}</h3>
-      //       <a href="${source_URL}" class="btn btn-primary button_bottom_margin mx-auto button_margin_left">${source_name} Assessment</a>
-      //     </div>
-      //   </div>
-      //       <br>
-      //     <div class="card media_bias_container_style text-center">
-      //       <div class="card-body">
-      //         <p class="card-text fact_check_color_red"> Claim Check by: ${source_name}</p>
-      //         <h2 class="card-title">"${source_name}" Media Bias Rating: </h2>
-      //           <div class="media_bias_container_style">No Media Bias Data Found.</div>
-      //         <br>
-      //           <div  style="width:0;">${biasImage}</div>
-      //         <h2>"${source_name}" Factual Reporting Record: </h2>
-      //           <div class="factual_rating_placeholder">No Factual Reporting Data Found.</div>
-      //         <br>
-      //         <div>
-      //           <h4>Bias and factual ratings taken from  <a href="${my_url}" class="btn btn-primary results-img">Media Bias/Fact Check</a></h4>
-      //         </div>
-      //       </div>
-      //     </div>
-      //       `);
-      //   console.log($404Holder);
-      //   $("#show").html($404Holder);
-      //   the_last_run();  
-      //   // throw new Error("invalid fetch request");
-      // }
       return data.text();
     }).then(resp => {
       const parser = new DOMParser();
@@ -159,7 +127,7 @@ async function displayResults(responseJson) {
           <br>
         <div class="card media_bias_container_style text-center">
           <div class="card-body">
-            <p class="card-text fact_check_color_red"> Claim Check by: ${source_name}</p>
+            <p class="card-text fact_check_color_red"> This Claim was checked by: ${source_name}</p>
             <h2 class="card-title">"${source_name}" Media Bias Rating: </h2>
               <div class="media_bias_container_style"></div>
             <br>
