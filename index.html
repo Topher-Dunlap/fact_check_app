@@ -26,11 +26,24 @@
 </header>
 
 <body>
-  <div id="spinner"></div>
-  <div class="container">
-    <div class="results hidden">
-      <br>
+
+  <!-- Starting splash page -->
+  <section class="splash_page top_bottom_margin center_text card">
+    <div class="splash_div">
+      <h3>
+        This Fact Checking site aggregates data from the last 30 days and displays
+        as many results as are available for a person or topic you search. Along with the claims 
+        and fact checks we also provide the biased and factual reporting record for the 
+        fact checkers in order to give you a better understanding of who's vetting the
+        claims.
+      </h3>
+      <img src="images/tick.png" width="60" height="60" href="https://www.flaticon.com/free-icon/tick_875636?term=check&page=2&position=49">
     </div>
+    <button type="button" class="button btn btn-info startButton">Continue</button>
+  </section>
+
+  <div id="spinner"></div>
+  <div class="container main_content">
     <div>
       <h1 class="bottom_margin title_page_alignment">Search for the latest fact checks on People &
         Topics</h1>
@@ -66,8 +79,6 @@
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
     integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous">
   </script>
-  <!-- <script src="https://code.jquery.com/jquery-3.3.1.js" integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60="
-    crossorigin="anonymous"></script> -->
   <script src="spin.js"></script>
   <script src="index.js"></script>
 </body>

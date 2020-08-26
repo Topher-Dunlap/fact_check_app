@@ -1,7 +1,7 @@
 'use strict';
 let spinner;
 
-//variables
+//global variables
 const apiKey = 'key=AIzaSyCEUtfNVFpN_JACI-I4Q6ksPJEEiGDK52o';
 const searchURL = 'https://content-factchecktools.googleapis.com/v1alpha1/claims:search?';
 const queryInput = '';
@@ -20,19 +20,6 @@ $("form").submit((event) => {
   fetch_api_data(user_input, limit_num);
 });
 
-
-function fetch_api_data(user_input, limit_num = 5) {
-  let url = `${searchURL}languageCode=en&query="${user_input}"&pageSize=${limit_num}&maxAgeDays=30&prettyPrint=true&${apiKey}`;
-  fetch(url)
-    .then((response) => response.json())
-    .then((responseJson) => displayResults(responseJson))
-    .catch(error =>  {
-      debugger;
-      spinner.stop();
-      alert('Something went wrong. Try again later.')
-    });
-}
-
 function add_user_input(u_input) {
   let new_user_input = u_input.toUpperCase();
   let user_input_string = "";
@@ -42,14 +29,10 @@ function add_user_input(u_input) {
 
 // pass by reference
 function displayNoResult(api_data_holder) {
-  // const $html = $(`<div>No Results for ${user_input}.</div>`);
-  // api_data_holder.push($html); 
-  // return api_data_holder;
   limit_num = 0;
 }
 
 async function displayResults(responseJson) {
-  console.log(responseJson);
   let obj = responseJson;
   let api_data_holder = [];
   let claim_counter = 0;
@@ -58,13 +41,13 @@ async function displayResults(responseJson) {
     $("#show").html(api_data_holder);
     the_last_run();
     return;
-  } 
+  }
   // determine length of results and user result input
   if (limit_num > obj.claims.length) {
     limit_num = obj.claims.length;
   }
   for (let i = 0; i < limit_num; i++) {
-    //Immediately invoked function executable
+    //set variables using jquery
     let source_name = obj.claims[i].claimReview[0].publisher.name;
     let check_claim = obj.claims[i].claimReview[0].textualRating;
     let source_URL = obj.claims[i].claimReview[0].url;
@@ -72,51 +55,51 @@ async function displayResults(responseJson) {
     let claimant = obj.claims[i].claimant;
     if (claimant == undefined) {
       claimant = "<br> <h4>- Unable to determine source of claim.</h4>";
-      }
+    }
     else {
       claimant = "-" + claimant;
     }
 
-    //alter source name for url biased scraping
-    source_name = source_name.split(' ').join('-');
+    //create correct source-name
+  //alter source name for url biased scraping
+  source_name = source_name.split(' ').join('-');
 
-    //determine if there is a .com or .org at the end of name. If so remove it
-    if (source_name.includes(".")) {
-      source_name = source_name.substring(0, source_name.length - 4);
-    }
+  //determine if there is a .com or .org at the end of name. If so remove it
+  if (source_name.includes(".")) {
+    source_name = source_name.substring(0, source_name.length - 4);
+  }
 
     //ajax variables
     let my_url = `https://mediabiasfactcheck.com/${source_name.toLowerCase()}`;
     var proxy = 'https://arcane-reef-86631.herokuapp.com/';
 
-      //replace the existing image with the new one
-      claim_counter += 1;
-      
-      //display the results section
-      let doc;
-      let biasImage = '';
-      let ratingImage = '';
-      const source_not_found = `Unable to gather media bias info for ${source_name}`;
+    //Count number of claims
+    claim_counter += 1;
+
+    //display the results section
+    let doc;
+    let biasImage = '';
+    let ratingImage = '';
+    const source_not_found = `Unable to gather media bias info for ${source_name}`;
     try {
-       // This is async, so don't move on until this is done.
-    await fetch(proxy + my_url, {}).then(data => {
-      return data.text();
-    }).then(resp => {
-      const parser = new DOMParser();
-      doc = parser.parseFromString(resp, 'text/html');
-      const allImages = doc.querySelectorAll('h2.entry-title noscript img');
+      // This is async, so don't move on until this is done.
+      await fetch(proxy + my_url, {}).then(data => {
+        return data.text();
+      }).then(resp => {
+        const parser = new DOMParser();
+        doc = parser.parseFromString(resp, 'text/html');
+        const allImages = doc.querySelectorAll('h2.entry-title noscript img');
 
-      // Handle the 'no image' problem here.  
-      console.log(allImages);
-      if (allImages.length) {
-        biasImage = $(allImages[0]);
-        ratingImage = $(allImages[1]);
-      } else {
-        biasImage = source_not_found;
-        ratingImage = source_not_found;
-      }
+        // Handle the 'no image' problem here.  
+        if (allImages.length) {
+          biasImage = $(allImages[0]);
+          ratingImage = $(allImages[1]);
+        } else {
+          biasImage = source_not_found;
+          ratingImage = source_not_found;
+        }
 
-      const $htmlHolder = $(`<br>
+        const $htmlHolder = $(`<br>
       <div class="card media round_box_corners_top">
         <div class="card-body" id="claim_container">
           <h4 class="badge badge-warning">Claim #${claim_counter}:</h4>
@@ -142,30 +125,42 @@ async function displayResults(responseJson) {
           </div>
         </div>
           `);
-         $htmlHolder.find('.bias_rating_placeholder').html(biasImage);
-         $htmlHolder.find('.factual_rating_placeholder').html(ratingImage);
-          //  remove_bias_class($htmlHolder);
-         if (doc.title === "Page not found - Media Bias/Fact Check") {
+        $htmlHolder.find('.bias_rating_placeholder').html(biasImage);
+        $htmlHolder.find('.factual_rating_placeholder').html(ratingImage);
+        //  remove_bias_class($htmlHolder);
+        if (doc.title === "Page not found - Media Bias/Fact Check") {
           ($htmlHolder.find(`.bias_rating_placeholder`)).removeClass(`bias_rating_placeholder`);
         }
-      api_data_holder.push($htmlHolder);
-    
-    }).catch(_ => {
-    });
-    $("#show").html(api_data_holder);
-  } catch (err) {
-    debugger;
+        api_data_holder.push($htmlHolder);
+
+      }).catch(_ => {
+      });
+      $("#show").html(api_data_holder);
+    } catch (err) {
     }
   }
+  //stop spinner show results
   the_last_run();
 }
 
-function the_last_run() {
-  $("#landing_header").hide();
-  $("#sticky_header").show();
-  $(".results").removeClass("hidden");
-  add_user_input(user_input);
-  spinner.stop();
+function fetch_api_data(user_input, limit_num = 5) {
+  let url = `${searchURL}languageCode=en&query="${user_input}"&pageSize=${limit_num}&maxAgeDays=30&prettyPrint=true&${apiKey}`;
+  fetch(url)
+    .then((response) => response.json())
+    .then((responseJson) => displayResults(responseJson))
+    .catch(error => {
+      spinner.stop();
+      alert('Something went wrong. Try again later.')
+    });
+}
+
+function landing_page() {
+  $(".main_content").hide();
+  $(".splash_page").on("click", ".startButton", function (event) {
+    $(".splash_page").hide();
+    $(".main_content").show();
+    console.log("`landing` ran");
+  });
 }
 
 function number_needed(num) {
@@ -173,4 +168,14 @@ function number_needed(num) {
     alert("Please Enter A Number");
   }
 }
+
+function the_last_run() {
+  $("#sticky_header").show();
+  $(".results").removeClass("hidden");
+  add_user_input(user_input);
+  spinner.stop();
+}
+
+$(landing_page);
+
 
