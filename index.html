@@ -1,75 +1,79 @@
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>Github repo search</title>
-  <link rel="shortcut icon" href="">
-  <!-- Latest compiled and minified CSS -->
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
-  <!-- Latest compiled JavaScript -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/spin.js/4.1.0/spin.min.css">
-  <!--Google Fonts-->
-  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Oswald:wght@300;700&display=swap"
-    rel="stylesheet">
-  <link rel="stylesheet" href="style.css">
-</head>
-
+  <head>
+    <!-- Meta Tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <!-- Title -->
+    <title>Fact Check Tool</title>
+    <!-- Latest compiled bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+    <!-- Latest compiled JavaScript -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/spin.js/4.1.0/spin.min.css">
+    <!--Google Fonts-->
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Oswald:wght@300;700&display=swap"
+      rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+  </head>
 <header>
   <!-- Image and text -->
-  <nav class="navbar navbar-brand navbar-light bg-light sticky">
-    <img src="images/check_logo.png" width="10" height="30" class="logo_img d-inline-block align-top" alt="check-logo">
+  <nav class="navbar navbar-brand navbar-light sticky">
+    <img src="images/check_logo.png" height="35" class="logo_img d-inline-block align-top" alt="Check mark logo">
     The Simple Fact
   </nav>
 </header>
-
 <body>
-
   <!-- Starting splash page -->
   <section class="splash_page top_bottom_margin center_text card">
     <div class="splash_div">
-      <h3>
+      <h3 class="margin-bottom">
         This Fact Checking site aggregates data from the last 30 days and displays
         as many results as are available for a person or topic you search. Along with the claims 
         and fact checks we also provide the biased and factual reporting record for the 
         fact checkers in order to give you a better understanding of who's vetting the
         claims.
       </h3>
-      <img src="images/tick.png" width="60" height="60" href="https://www.flaticon.com/free-icon/tick_875636?term=check&page=2&position=49">
+      <img src="images/tick.png" width="60" height="60" alt="check mark">
     </div>
-    <button type="button" class="button btn btn-info startButton">Continue</button>
+    <button type="button" class="button btn btn-info btn-lg startButton mx-auto">Continue</button>
+    <footer>
+      <div class="copywrite_splash">
+       © Topher Dunlap
+      </div>
+    </footer>
   </section>
 
   <div id="spinner"></div>
-  <div class="container main_content">
+  <div class="container main_content margin-top">
     <div>
       <h1 class="bottom_margin title_page_alignment">Search for the latest fact checks on People &
         Topics</h1>
     </div>
     <form class="left_align">
       <fieldset>
-        <label for="state_id">Please enter a person or topic to fact check:</label>
-        <input type="text" placeholder="Enter a Topic or Person" size="40" id="state_id">
+        <label for="siteSearch">Please enter a person or topic to fact check:</label>
         <br>
-        <label> Number of returned results: </label>
+        <input type="text" placeholder="Enter a Topic or Person" id="siteSearch">
         <br>
-        <input type="number" placeholder="Enter a Value" size="10" id="limit_num">
+        <label for="limit_num" class="margin-top"> Number of returned results: </label>
         <br>
-        <input type="submit" value="Search" class="button btn btn-info">
+        <input type="number" placeholder="Enter a Value" id="limit_num">
+        <br>
+        <input type="submit" value="Search" class="button btn btn-info btn-lg margin-top">
       </fieldset>
     </form>
     <section class="results hidden">
       <div id="show"></div>
     </section>
     <footer>
-      <h4 class="copywrite">© Topher Dunlap</h4>
+      <div class="copywrite">
+       © Topher Dunlap
+      </div>
     </footer>
   </div>
   <!-- jQuery library -->
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-
   <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
     integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous">
   </script>

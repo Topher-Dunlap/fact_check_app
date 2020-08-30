@@ -27,7 +27,7 @@ function add_user_input(u_input) {
   $("#show").prepend(user_input_string);
 }
 
-// pass by reference
+//display 0 if no results found
 function displayNoResult(api_data_holder) {
   limit_num = 0;
 }
@@ -60,14 +60,14 @@ async function displayResults(responseJson) {
       claimant = "-" + claimant;
     }
 
-    //create correct source-name
-  //alter source name for url biased scraping
-  source_name = source_name.split(' ').join('-');
 
-  //determine if there is a .com or .org at the end of name. If so remove it
-  if (source_name.includes(".")) {
-    source_name = source_name.substring(0, source_name.length - 4);
-  }
+    //alter source name for url biased scraping
+    source_name = source_name.split(' ').join('-');
+
+    //determine if there is a .com or .org at the end of name. If so remove it
+    if (source_name.includes(".")) {
+      source_name = source_name.substring(0, source_name.length - 4);
+    }
 
     //ajax variables
     let my_url = `https://mediabiasfactcheck.com/${source_name.toLowerCase()}`;
@@ -104,23 +104,24 @@ async function displayResults(responseJson) {
         <div class="card-body" id="claim_container">
           <h4 class="badge badge-warning">Claim #${claim_counter}:</h4>
           <h2 class="card-title">${source_title} ${claimant}</h2>
+            <br>
           <h3 class="fact_check_color_red"> ${source_name} states this claim is: ${check_claim}</h3>
-          <a href="${source_URL}" class="btn btn-primary button_bottom_margin mx-auto button_margin_left">${source_name} Assessment</a>
+          <a href="${source_URL}" target="_blank" class="btn btn-primary btn-lg btn_bias_color button_bottom_margin mx-auto button_margin_left">${source_name} Assessment</a>
         </div>
       </div>
           <br>
         <div class="card media_bias_container_style text-center">
           <div class="card-body">
-            <p class="card-text fact_check_color_red">${source_name}</p>
+            <p class="card-text fact_check_color_red red_text">${source_name}</p>
             <h2 class="card-title">"${source_name}" Media Bias Rating: </h2>
-              <div class="media_bias_container_style"></div>
-            <br>
               <div class="bias_rating_placeholder red_text">${biasImage}</div>
+              <br>
+              <br>
             <h2>"${source_name}" Factual Reporting Record: </h2>
               <div class="factual_rating_placeholder red_text"></div>
             <br>
             <div>
-              <h4>Bias and factual ratings taken from  <a href="${my_url}" class="btn btn-primary results-img">Media Bias/Fact Check</a></h4>
+              <h4>Bias and factual ratings taken from  <a href="${my_url}" target="_blank" class="btn btn-primary btn_bias_color btn-lg results-img">Media Bias/Fact Check</a></h4>
             </div>
           </div>
         </div>

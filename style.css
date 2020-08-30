@@ -57,7 +57,7 @@
   /* classes */
 
   .badge {
-      background-color: #31B0D5
+      /* background-color: #31B0D5 */
   }
 
   .bias_rating_placeholder {
@@ -71,6 +71,8 @@
   .button {
     color: white;
     margin-top: 1rem;
+    width: 12rem;
+    font-size: 1.5rem;
 }
 
   .button_bottom_margin {
@@ -79,8 +81,14 @@
 
   .btn {
       color: #ffffff;
-      background-color: #F7A305;
-      border: #F7A305;
+      background-color: #128496;
+      border: #128496;
+  }
+
+  .btn_bias_color {
+    background-color: #F6A306;
+    border: #F6A306;
+    font-size: 1.5rem;
   }
 
   .bottom_margin {
@@ -115,6 +123,14 @@
     font-family: 'Abel', sans-serif;
 }
 
+  .copywrite_splash {
+    margin-top: 3rem;
+    font-size: 1rem;
+    text-align: center;
+    font-family: 'Abel', sans-serif;
+
+  }
+
   .fact_check_color_blue {
     /* color: #1A73E8; */
     color: white;
@@ -122,7 +138,7 @@
 
   .fact_check_color_red {
       /* color: #d7322d; */
-      color: #F00011
+      color: #F00011;
   }
 
   .fact_check_color_green {
@@ -140,9 +156,17 @@
 
   .logo_img {
     /* height: auto; */
-    width: 4rem;
+    width: 3rem;
     vertical-align: middle;
 }
+
+  .margin-top {
+    margin-top: 1rem;
+  }
+
+  .margin-bottom {
+    margin-bottom: 2rem;;
+  }
 
   .media_bias_container_style {
     border-bottom-left-radius: 20px;
@@ -152,6 +176,10 @@
     text-align: center;
     /* clear: right; */
     font-family: 'Bebas Neue', cursive;
+  }
+
+  .navbar-brand {
+    font-size: 1.5rem;
   }
 
   .navbar-brand img {
@@ -165,6 +193,7 @@
 
   .red_text {
       color: red;
+      font-size: 1.5rem;
   }
 
   .splash_div {
@@ -173,12 +202,12 @@
 
   .splash_page {
       margin-bottom: 3rem;
-      padding-bottom: 4rem;
+      padding-bottom: 1rem;
   }
 
   .sticky {
     text-align: center;
-    background-color: #F7A305;
+    background-color: #128496;
     color: #ffffff;
     position: sticky;
     margin-top: 0;
@@ -188,5 +217,5 @@
   }
 
   .top_bottom_margin {
-    padding: 3rem 0rem 3rem;
+    /* padding: 3rem 0rem 3rem; */
   }
