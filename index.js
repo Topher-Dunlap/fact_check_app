@@ -9,7 +9,7 @@ let langCode = 'languageCode=en';
 let user_input = '';
 let limit_num = '';
 
-//Functions
+//Functions//
 $("form").submit((event) => {
   $("#show").html('');
   spinner = new Spin.Spinner().spin(document.querySelector('body'));
@@ -32,6 +32,31 @@ function displayNoResult(api_data_holder) {
   limit_num = 0;
 }
 
+//create URL
+const getUrl = (name) => `https://mediabiasfactcheck.com/${name.toLowerCase()}`;
+const proxy = 'https://arcane-reef-86631.herokuapp.com/';
+
+const setSources = (source) => {
+  let source_name = source.claimReview[0].publisher.name;
+  const check_claim = source.claimReview[0].textualRating;
+  const source_URL = source.claimReview[0].url;
+  const source_title = source.text;
+  let claimant = source.claimant;
+  if (claimant == undefined) {
+    claimant = "<br> <h4>- Unable to determine source of claim.</h4>";
+  }
+  else {
+    claimant = "-" + claimant;
+  }
+  source_name = source_name.split(' ').join('-');
+
+  //determine if there is a .com or .org at the end of name. If so remove it
+  if (source_name.includes(".")) {
+    source_name = source_name.substring(0, source_name.length - 4);
+  }
+  return [source_name, check_claim, source_URL, source_title, claimant];
+};
+
 async function displayResults(responseJson) {
   let obj = responseJson;
   let api_data_holder = [];
@@ -48,30 +73,7 @@ async function displayResults(responseJson) {
   }
   for (let i = 0; i < limit_num; i++) {
     //set variables using jquery
-    let source_name = obj.claims[i].claimReview[0].publisher.name;
-    let check_claim = obj.claims[i].claimReview[0].textualRating;
-    let source_URL = obj.claims[i].claimReview[0].url;
-    let source_title = obj.claims[i].text;
-    let claimant = obj.claims[i].claimant;
-    if (claimant == undefined) {
-      claimant = "<br> <h4>- Unable to determine source of claim.</h4>";
-    }
-    else {
-      claimant = "-" + claimant;
-    }
-
-
-    //alter source name for url biased scraping
-    source_name = source_name.split(' ').join('-');
-
-    //determine if there is a .com or .org at the end of name. If so remove it
-    if (source_name.includes(".")) {
-      source_name = source_name.substring(0, source_name.length - 4);
-    }
-
-    //ajax variables
-    let my_url = `https://mediabiasfactcheck.com/${source_name.toLowerCase()}`;
-    var proxy = 'https://arcane-reef-86631.herokuapp.com/';
+    const [source_name, check_claim, source_URL, source_title, claimant] = setSources(obj.claims[i]);
 
     //Count number of claims
     claim_counter += 1;
@@ -81,23 +83,34 @@ async function displayResults(responseJson) {
     let biasImage = '';
     let ratingImage = '';
     const source_not_found = `Unable to gather media bias info for ${source_name}`;
+    const getBiasImages = (resp) => {
+      const parser = new DOMParser();
+      doc = parser.parseFromString(resp, 'text/html');
+      // 
+      let allImages = doc.querySelectorAll('h2.entry-title noscript img');
+      if (!allImages.length) {
+        allImages = doc.querySelectorAll('noscript > img');
+      }
+      // Handle the 'no image' problem here.  
+      if (allImages.length) {
+        biasImage = $(allImages[0]);
+        ratingImage = $(allImages[1]);
+      } else {
+        biasImage = source_not_found;
+        ratingImage = source_not_found;
+      }
+      return [biasImage, ratingImage];
+    }
     try {
+      const my_url = getUrl(source_name);
       // This is async, so don't move on until this is done.
       await fetch(proxy + my_url, {}).then(data => {
         return data.text();
       }).then(resp => {
-        const parser = new DOMParser();
-        doc = parser.parseFromString(resp, 'text/html');
-        const allImages = doc.querySelectorAll('h2.entry-title noscript img');
-
-        // Handle the 'no image' problem here.  
-        if (allImages.length) {
-          biasImage = $(allImages[0]);
-          ratingImage = $(allImages[1]);
-        } else {
-          biasImage = source_not_found;
-          ratingImage = source_not_found;
-        }
+        // get the bias image and the rating image.
+        
+        [biasImage, ratingImage] = getBiasImages(resp);
+        debugger;
 
         const $htmlHolder = $(`<br>
       <div class="card media round_box_corners_top">
@@ -106,7 +119,7 @@ async function displayResults(responseJson) {
           <h2 class="card-title">${source_title} ${claimant}</h2>
             <br>
           <h3 class="fact_check_color_red"> ${source_name} states this claim is: ${check_claim}</h3>
-          <a href="${source_URL}" target="_blank" class="btn btn-primary btn-lg btn_bias_color button_bottom_margin mx-auto button_margin_left">${source_name} Assessment</a>
+          <a href="${source_URL}" target="_blank" class="btn btn-primary btn_bias_color button_bottom_margin mx-auto button_margin_left">${source_name} Assessment</a>
         </div>
       </div>
           <br>
@@ -121,7 +134,7 @@ async function displayResults(responseJson) {
               <div class="factual_rating_placeholder red_text"></div>
             <br>
             <div>
-              <h4>Bias and factual ratings taken from  <a href="${my_url}" target="_blank" class="btn btn-primary btn_bias_color btn-lg results-img">Media Bias/Fact Check</a></h4>
+              <h4>Bias and factual ratings taken from  <a href="${my_url}" target="_blank" class="btn btn-primary btn_bias_color results-img">Media Bias/Fact Check</a></h4>
             </div>
           </div>
         </div>
@@ -151,6 +164,7 @@ function fetch_api_data(user_input, limit_num = 5) {
     .then((responseJson) => displayResults(responseJson))
     .catch(error => {
       spinner.stop();
+      console.error(error);
       alert('Something went wrong. Try again later.')
     });
 }
