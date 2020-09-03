@@ -29,6 +29,8 @@ Results:
 
 ![results](screenshots/results.png)
 
+![results2](screenshots/results2.png)
+
 ## How to Use
 
 1. Enter a person or a topic in the search field.
