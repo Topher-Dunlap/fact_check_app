@@ -1,13 +1,7 @@
 
 https://topher-dunlap.github.io/fact_check_app/
 
-<!-- # book-thing.io
 
-Initial wireframes:
-
-https://wireframe.cc/x0a8I9
-
-https://wireframe.cc/6oVXTU -->
 # fact_check_app
 
 This app agrigates and displays results from the Google Fact Check API in an easy to read manner. It also combines the Media bias and Factual reporting record for the fact checking source.
@@ -17,7 +11,7 @@ This app agrigates and displays results from the Google Fact Check API in an eas
 I wanted to create a resource to help dissipate the volumes of misinformation we see in our society.
 
 ## Screenshots
-Login Screen/Landing Page:
+Landing Page:
 
 ![landing page](screenshots/landing.png)
 
@@ -52,9 +46,6 @@ Results:
 * Gives factual reporting record of source doing the fact checking
 * Gives media bias rating of source doing the fact checking
 
-## Demo
-
-- [Live Demo](https://book-thing.herokuapp.com/)
 
 ## Authors
 
